@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <algorithm>
 
 using namespace std;
 using namespace std::chrono;
@@ -17,21 +18,25 @@ struct Puntajesjug{
 	int puntaje=0;	
 }p_player[10];
 
-int inicio();
+void inicio();
 bool validar_numeros(char numero[]);
+void dibujo (int intentos);
 int veces_jug=0;
+
+bool comparar(const Puntajesjug a, const Puntajesjug b) {
+    return a.puntaje > b.puntaje; // Orden descendente
+}
 
 void jugar(){
 	system("cls");
-	char palabras[10][15] = {"FRUTAS","ANIMALES","PAISES","OBJETOS","MAFLA","COMPILAR","GUAMBRITOS","BANDIDO","TABACO","NOMAMEINGE"};
-	int n_pal, longitud, espacios, puntos=0, i, opcion, j;
+	char palabras[9][15] = {"LUDOLAB","SEGUNDAESTODO","BIELA","DOSQUETRES","PANTERA","REINICIAR","PYTON","BANDIDO","ASO"};
+	int n_pal, longitud, espacios, puntos=2500, i, opcion, j;
 	char letra, vali_letra;
 	int aciertos = 0;
 	int intentos = 0;
-	int ganar = 0;
 	srand(time(NULL));
 	
-	opcion = rand() % 10; //SE GENERA UN NUMERO ALEATORIO COMPRENDIDO ENTRE 0 Y 9
+	opcion = rand() % 9; //SE GENERA UN NUMERO ALEATORIO COMPRENDIDO ENTRE 0 Y 9
 	longitud = strlen(palabras[opcion]); //SE ALMACENA LA LONGITUD DE LA PALABRA 
 	char frase[longitud];
 	
@@ -40,13 +45,12 @@ void jugar(){
 		frase[i] = '_';
 	}
 	
-	do{
+	while(intentos !=7){
 		aciertos=0;
 	    system("cls");
 		cout<<"\n\t\t\t\tJUEGO EL AHORCADO\n\n";
 		cout<<"Intentos Disponibles: "<<6-intentos<<" \nPuntuacion: "<<puntos;
 		dibujo(intentos);
-	//dibujo(intentos);
 		
 		//IMPRIME EL ARRAY DE CARACTERES FRASE
 		cout<<"\n\n\n";
@@ -55,17 +59,17 @@ void jugar(){
 		}
 		
 		if (intentos == 6){
-			cout<<"\n\n PERDISTE!!\n";
-			cout<<" LA SOLUCION ERA: "<<palabras[opcion]<<"\n";
-			cout<<"Ingresa tu nombre de jugador"<<endl;
+			cout<<"\n\nPERDISTE!!\n";
+			cout<<"LA SOLUCION ERA: "<<palabras[opcion]<<"\n";
+			cout<<"INGRESA TU NOMBRE:"<<endl;
 			cin>>p_player[veces_jug].name;
 		 	p_player[veces_jug].puntaje=puntos;
 		 	veces_jug++;
 			cout<<"Presiona una tecla para volver al menú principal";	
 			getch();
-			inicio();
+			break;
 		}
-		
+				
 		//PROCESO QUE COMPRUEBA SI SE HA ADIVINADO LA PALABRA
 		espacios=0;
 		
@@ -74,51 +78,50 @@ void jugar(){
 				espacios++;
 		}
 		
-		
 		if (espacios == 0){
-			cout<<"\n\n FELICIDADES.. GANASTE!!\n\n";
-			cout<<"Ingresa tu nombre de jugador"<<endl;
+			cout<<"\n\nFELICIDADES.. GANASTE!!\n\n";
+			cout<<"INGRESA TU NOMBRE:"<<endl;
 			cin>>p_player[veces_jug].name;
 		 	p_player[veces_jug].puntaje=puntos;
 		 	veces_jug++;
 			cout<<"Presiona una tecla para volver al menú principal";
-			getch();
-			inicio();			
+			getch();	
+			break;		
 		}
 		
-		cout<<"\n\nDigite una letra: ";
-		cin>>vali_letra;
-		
-		if(!(vali_letra>=65 && vali_letra<=90) && !(vali_letra>=97 && vali_letra<=122)){
-		 //letra='.';
-	  	}else{
-	  	  letra=toupper(vali_letra);
-	  	  cout<<"La letra es: "<<letra;
-	  	  getch();
-		}
-		
-		//PROCESO QUE VERIFICA SI LA LETRA INGRESADA EXISTE EN LA PALABRA, SI ESTO ES VERDADERO, SE REEMPLAZA EL CARACTER GUION BAJO POR LA LETRA INGRESADA 
-		for (j = 0; j < longitud; j++){
-			if (letra == palabras[opcion][j]){
-				frase[j] = letra;
-				aciertos++;
-				puntos += 200;
+		if(intentos!=6 && espacios!=0){
+			cout<<"\n\nDigite una letra: ";
+			cin>>vali_letra;
+			if(!(vali_letra>=65 && vali_letra<=90) && !(vali_letra>=97 && vali_letra<=122)){
+			 letra='.';
+		  	}else{
+		  	  letra=toupper(vali_letra);
+		  	  cout<<"La letra es: "<<letra;
+		  	  getch();
 			}
+			
+			//PROCESO QUE VERIFICA SI LA LETRA INGRESADA EXISTE EN LA PALABRA, SI ESTO ES VERDADERO, SE REEMPLAZA EL CARACTER GUION BAJO POR LA LETRA INGRESADA 
+			for (j = 0; j < longitud; j++){
+				if (letra == palabras[opcion][j]){
+					frase[j] = letra;
+					aciertos++;
+				}
 		}
-		
+			
 		if (aciertos == 0){
-			intentos++;
-	    }
-	    
-		}while(intentos !=7);
-	
-	cout<<endl;
-	
+				intentos++;
+				puntos -= 200;
+		    }
+	}			
+ }
+ inicio();
 }
+                     
 void puntajes(){
 	system("cls");
 	cout<<"\t\t\t\tPUNTAJES"<<endl;
 	cout<<"\tJUGADOR\t\tPUNTOS"<<endl;
+	sort(p_player, p_player + 10, comparar);
 	for(int i=0; i<veces_jug; i++){
 		cout<<"\t"<<p_player[i].name<<"\t\t"<<p_player[i].puntaje<<endl;
 	}
@@ -133,7 +136,7 @@ void creditos(){
 	cout<<"PROGRAMADORES"<<endl;
 	cout<<"\nANTHONY ALANGASÍ"<<endl;
 	cout<<"\nGUILLERMO CALVACHE"<<endl;
-	cout<<"\nDISEÑADORES"<<endl;
+	cout<<"\n\nDISEÑADORES"<<endl;
 	cout<<"\nANTHONY ALANGASÍ"<<endl;
 	cout<<"\nGUILLERMO CALVACHE"<<endl;
 	cout<<"\nPresiona una tecla para volver al menú principal";
@@ -141,7 +144,7 @@ void creditos(){
 	inicio();
 }       
 
-int inicio(){
+void inicio(){
 	
 	int op=0;
 	char cadena [10];
@@ -180,7 +183,7 @@ int inicio(){
 		break;
 		
 		case 4: 
-			return 0;
+			system("exit");
 			break;
 		
 		default: 
@@ -208,46 +211,46 @@ bool validar_numeros(char numero[]){
 void dibujo (int intentos){
 	switch(intentos){
 		case 0:
-			printf("\n     _______\n    |       |\n    |\n    |\n    |\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |\n    |\n    |\n    |\n    |\n ----------";
 			break;
 		case 1:
-			printf("\n     _______\n    |       |\n    |       0\n    |\n    |\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |\n    |\n    |\n    |\n ----------";
 			break;
 		case 2:
-			printf("\n     _______\n    |       |\n    |       0\n    |       |\n    |\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |       |\n    |\n    |\n    |\n ----------";
 			break;
 		case 3:
-			printf("\n     _______\n    |       |\n    |       0\n    |      /|\n    |\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |      /|\n    |\n    |\n    |\n ----------";
 			break;
 		case 4:
-			printf("\n     _______\n    |       |\n    |       0\n    |      /|");
-			printf("\\");
-			printf("\n");
-			printf("    |\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |      /|";
+			cout<<"\\";
+			cout<<"\n";
+			cout<<"    |\n    |\n    |\n ----------";
 			break;
 		case 5:
-			printf("\n     _______\n    |       |\n    |       0\n    |      /|");
-			printf("\\");
-			printf("\n");
-			printf("    |      /\n    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |      /|";
+			cout<<"\\";
+			cout<<"\n";
+			cout<<"    |      /\n    |\n    |\n ----------";
 			break;
 		case 6:
-			printf("\n     _______\n    |       |\n    |       0\n    |      /|");
-			printf("\\");
-			printf("\n");
-			printf("    |      / ");
-			printf("\\");
-			printf("\n");
-			printf("    |\n    |\n ----------");
+			cout<<"\n     _______\n    |       |\n    |       0\n    |      /|";
+			cout<<"\\";
+			cout<<"\n";
+			cout<<"    |      / ";
+			cout<<"\\";
+			cout<<"\n";
+			cout<<"    |\n    |\n ----------";
 			break;
-	}
-	
-}
+	}           
+	            
+}                                   
 
 int main(){
 	system("mode con cols=80 lines=25");
 	inicio();
-	system("pause");
+//	system("pause");
 	return 0;
 }
 
