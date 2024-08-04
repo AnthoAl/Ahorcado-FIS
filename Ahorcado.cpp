@@ -24,7 +24,7 @@ void dibujo (int intentos);
 int veces_jug=0;
 
 bool comparar(const Puntajesjug a, const Puntajesjug b) {
-    return a.puntaje > b.puntaje; // Orden descendente
+    return a.puntaje > b.puntaje;
 }
 
 void jugar(){
@@ -96,8 +96,6 @@ void jugar(){
 			 letra='.';
 		  	}else{
 		  	  letra=toupper(vali_letra);
-		  	  cout<<"La letra es: "<<letra;
-		  	  getch();
 			}
 			
 			//PROCESO QUE VERIFICA SI LA LETRA INGRESADA EXISTE EN LA PALABRA, SI ESTO ES VERDADERO, SE REEMPLAZA EL CARACTER GUION BAJO POR LA LETRA INGRESADA 
