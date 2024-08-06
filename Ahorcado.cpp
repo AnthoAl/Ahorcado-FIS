@@ -1,13 +1,11 @@
 //Juego Ahorcado FIS
 
 #include <iostream>
-#include <chrono>
+#include <chrono> //Son para crear el numero random
 #include <thread>
-#include <conio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <algorithm>
+#include <conio.h> 
+#include <string.h> //Para la función strlen()
+#include <algorithm>//Para algoritmo de ordenamiento sort
 
 using namespace std;
 using namespace std::chrono;
@@ -29,14 +27,14 @@ bool comparar(const Puntajesjug a, const Puntajesjug b) {
 
 void jugar(){
 	system("cls");
-	char palabras[9][15] = {"LUDOLAB","SEGUNDAESTODO","BIELA","DOSQUETRES","PANTERA","REINICIAR","PYTON","BANDIDO","ASO"};
+	char palabras[9][15] = {"LUDOLAB","SEGUNDAESTODO","BIELA","DOSQUETRES","PANTERA","REINICIAR","AEIS","BANDIDAS","ASO"};
 	int n_pal, longitud, espacios, puntos=2500, i, opcion, j;
 	char letra, vali_letra;
 	int aciertos = 0;
 	int intentos = 0;
 	srand(time(NULL));
 	
-	opcion = rand() % 9; //SE GENERA UN NUMERO ALEATORIO COMPRENDIDO ENTRE 0 Y 9
+	opcion = rand() % 9; //SE GENERA UN NUMERO ALEATORIO COMPRENDIDO ENTRE 0 Y 8
 	longitud = strlen(palabras[opcion]); //SE ALMACENA LA LONGITUD DE LA PALABRA 
 	char frase[longitud];
 	
@@ -48,7 +46,7 @@ void jugar(){
 	while(intentos !=7){
 		aciertos=0;
 	    system("cls");
-		cout<<"\n\t\t\t\tJUEGO EL AHORCADO\n\n";
+		cout<<"\n\t\t\t\t!!!ADIVINA LA PALABRA Y SÁLVATE!!!\n\n";
 		cout<<"Intentos Disponibles: "<<6-intentos<<" \nPuntuacion: "<<puntos;
 		dibujo(intentos);
 		
@@ -60,12 +58,12 @@ void jugar(){
 		
 		if (intentos == 6){
 			cout<<"\n\nPERDISTE!!\n";
-			cout<<"LA SOLUCION ERA: "<<palabras[opcion]<<"\n";
-			cout<<"INGRESA TU NOMBRE:"<<endl;
+			cout<<"\nLA SOLUCION ERA: "<<palabras[opcion]<<"\n";
+			cout<<"\nINGRESA TU NOMBRE:"<<endl;
 			cin>>p_player[veces_jug].name;
 		 	p_player[veces_jug].puntaje=puntos;
 		 	veces_jug++;
-			cout<<"Presiona una tecla para volver al menú principal";	
+			cout<<"\nPresiona una tecla para volver al menú principal";	
 			getch();
 			break;
 		}
@@ -84,12 +82,11 @@ void jugar(){
 			cin>>p_player[veces_jug].name;
 		 	p_player[veces_jug].puntaje=puntos;
 		 	veces_jug++;
-			cout<<"Presiona una tecla para volver al menú principal";
+			cout<<"\nPresiona una tecla para volver al menú principal";
 			getch();	
 			break;		
 		}
 		
-		if(intentos!=6 && espacios!=0){
 			cout<<"\n\nDigite una letra: ";
 			cin>>vali_letra;
 			if(!(vali_letra>=65 && vali_letra<=90) && !(vali_letra>=97 && vali_letra<=122)){
@@ -109,8 +106,7 @@ void jugar(){
 		if (aciertos == 0){
 				intentos++;
 				puntos -= 200;
-		    }
-	}			
+		    }		
  }
  inicio();
 }
@@ -155,11 +151,17 @@ void inicio(){
 		cout<<"||==||  ||==|| |      | ||===//  |	||==|| ||   || |      |"<<endl;
 		cout<<"||  ||  ||  ||  \\____/  ||   ||   \\___  ||  || ||___/   \\____/"<<endl;
 		
-		cout<<"\nSeleciona una opción :)"<<endl;
-		cout<<"1.Jugar"<<endl;
-		cout<<"2.Puntajes"<<endl;
-		cout<<"3.Créditos"<<endl;
-		cout<<"4.Salir"<<endl;
+		cout<<"\n";
+		cout<<"\t\t ====== ||======||  ======"<<endl;
+		cout<<"\t\t||          ||     ||____"<<endl;
+		cout<<"\t\t||===       ||           ||"<<endl;
+		cout<<"\t\t||      ||======|| ======/"<<endl;
+		
+		cout<<"\nSELECCIONA UNA OPCIÓN :)"<<endl;
+		cout<<"1.JUGAR"<<endl;
+		cout<<"2.PUNTAJES"<<endl;
+		cout<<"3.CRÉDITOS"<<endl;
+		cout<<"4.SALIR"<<endl;
 		cin>>cadena;
 		valido=validar_numeros(cadena);
 		
