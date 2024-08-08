@@ -250,7 +250,6 @@ void dibujo (int intentos){
 int main(){
 	system("mode con cols=80 lines=25");
 	inicio();
-//	system("pause");
 	return 0;
 }
 
